@@ -55,7 +55,7 @@
                                         <a href="{{ route('student/list') }}" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
                                         <a href="{{ route('student/grid') }}" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
                                         <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                        <a href="{{ route('student/add/page') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                        {{-- <a href="{{ route('student/add/page') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a> --}}
                                     </div>
                                 </div>
                             </div>
@@ -65,46 +65,24 @@
                                     class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                                     <thead class="student-thread">
                                         <tr>
-                                            <th>
-                                                <div class="form-check check-tables">
-                                                    <input class="form-check-input" type="checkbox" value="something">
-                                                </div>
-                                            </th>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Class</th>
+                                            <th>Student ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
                                             <th>DOB</th>
-                                            <th>Parent Name</th>
                                             <th>Mobile Number</th>
-                                            <th>Address</th>
-                                            <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($studentList as $key=>$list )
-                                        <tr>
-                                            <td>
-                                                <div class="form-check check-tables">
-                                                    <input class="form-check-input" type="checkbox" value="something">
-                                                </div>
-                                            </td>
-                                            <td>STD{{ ++$key }}</td>
+                                        <tr style="cursor: pointer;" onmouseover="this.style.backgroundColor='#f3f3f2'" onmouseout="this.style.backgroundColor=''">
+                                            <td>STD{{ ++$list->student_user_id }}</td>
                                             <td hidden class="id">{{ $list->id }}</td>
                                             <td hidden class="avatar">{{ $list->upload }}</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="student-details.html"class="avatar avatar-sm me-2">
-                                                        <img class="avatar-img rounded-circle" src="{{ Storage::url('student-photos/'.$list->upload) }}" alt="User Image">
-                                                    </a>
-                                                    <a href="student-details.html">{{ $list->first_name }} {{ $list->last_name }}</a>
-                                                </h2>
-                                            </td>
-                                            <td>{{ $list->class }} {{ $list->section }}</td>
+                                            <td>{{ $list->first_name }}</td> 
+                                            <td>{{ $list->last_name }}</td>
                                             <td>{{ $list->date_of_birth }}</td>
-                                            <td>Soeng Soeng</td>
                                             <td>{{ $list->phone_number }}</td>
-                                            <td>110 Sen Sok Steet,PP</td>
-                                            <td class="text-end">
+                                            {{-- <td class="text-end">
                                                 <div class="actions">
                                                     <a href="{{ url('student/edit/'.$list->id) }}" class="btn btn-sm bg-danger-light">
                                                         <i class="feather-edit"></i>
@@ -113,7 +91,7 @@
                                                         <i class="feather-trash-2 me-1"></i>
                                                     </a>
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @endforeach
                                     </tbody>

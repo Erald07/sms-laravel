@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('course_timetables', function (Blueprint $table) {
             $table->id();
-            $table->string('student_user_id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('date_of_birth');
-            $table->string('phone_number');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->string('date');
+            $table->time('start');
+            $table->time('end');
+            $table->string('room');
+            $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('course_timetables');
     }
 };

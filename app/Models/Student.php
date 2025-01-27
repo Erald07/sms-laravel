@@ -11,16 +11,22 @@ class Student extends Model
     protected $fillable = [
         'first_name',
         'last_name',
-        'gender',
         'date_of_birth',
-        'roll',
-        'blood_group',
-        'religion',
-        'email',
-        'class',
-        'section',
-        'admission_id',
         'phone_number',
-        'upload',
     ];
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_participants', 'student_id', 'course_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'student_user_id', 'user_id');
+    }
+
+    public function courseParticipants()
+{
+    return $this->hasMany(CourseParticipants::class, 'student_id');
 }
+} 

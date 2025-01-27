@@ -21,15 +21,9 @@ class User extends Authenticatable
         'name',
         'user_id',
         'email',
-        'join_date',
         'phone_number',
         'status',
         'role_name',
-        'email',
-        'role_name',
-        'avatar',
-        'position',
-        'department',
         'password',
     ];
 
@@ -51,4 +45,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'teacher_id', 'user_id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'student_user_id', 'user_id');
+    }
 }

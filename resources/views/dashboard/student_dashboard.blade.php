@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="page-sub-header">
-                            <h3 class="page-title">Welcome Bruklin!</h3>
+                            <h3 class="page-title">Welcome <?php echo auth()->user()->name ?></h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                                 <li class="breadcrumb-item active">Student</li>
@@ -26,7 +26,7 @@
                             <div class="db-widgets d-flex justify-content-between align-items-center">
                                 <div class="db-info">
                                     <h6>All Courses</h6>
-                                    <h3>04/06</h3>
+                                    <h3><?php echo count($studentCourses) ?></h3>
                                 </div>
                                 <div class="db-icon">
                                     <img src="{{ URL::to('assets/img/icons/teacher-icon-01.svg') }}" alt="Dashboard Icon">
@@ -83,103 +83,62 @@
             </div>
 
             <div class="row">
-                <div class="col-12 col-lg-12 col-xl-8">
+                <div class="">
                     <div class="card flex-fill comman-shadow">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h5 class="card-title">Today’s Lesson</h5>
+                                    <h5 class="card-title">Upcoming Timetables</h5>
                                 </div>
-                                <div class="col-6">
-                                    <ul class="chart-list-out">
-                                        <li>
-                                            <span class="circle-blue"></span>
-                                            <span class="circle-gray"></span>
-                                            <span class="circle-gray"></span>
-                                        </li>
-                                        <li class="lesson-view-all"><a href="#">View All</a></li>
-                                        <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dash-circle">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 dash-widget1">
-                                    <div class="circle-bar circle-bar2">
-                                        <div class="circle-graph2" data-percent="80">
-                                            <b>80%</b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-3">
-                                    <div class="dash-details">
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-01.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Class</h5>
-                                                <h4>Electrical Engg</h4>
-                                            </div>
-                                        </div>
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-02.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Lessons</h5>
-                                                <h4>5 Lessons</h4>
-                                            </div>
-                                        </div>
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-03.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Time</h5>
-                                                <h4>Lessons</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-3">
-                                    <div class="dash-details">
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-04.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Asignment</h5>
-                                                <h4>5 Asignment</h4>
-                                            </div>
-                                        </div>
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-05.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Staff</h5>
-                                                <h4>John Doe</h4>
-                                            </div>
-                                        </div>
-                                        <div class="lesson-activity">
-                                            <div class="lesson-imgs">
-                                                <img src="{{URL::to('assets/img/icons/lesson-icon-06.svg')}}" alt="">
-                                            </div>
-                                            <div class="views-lesson">
-                                                <h5>Lesson Learned</h5>
-                                                <h4>10/50</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 d-flex align-items-center justify-content-center">
-                                    <div class="skip-group">
-                                        <button type="submit" class="btn btn-info skip-btn">skip</button>
-                                        <button type="submit" class="btn btn-info continue-btn">Continue</button>
-                                    </div>
-                                </div>
+                                <table class="table table-center">
+                                    <tbody>
+                                        @php
+                                            $hasUpcomingTimetable = false;
+                                        @endphp
+                                        @foreach ($timetables as $index => $timetable)
+                                            <?php 
+                                            $parsedDate = \Carbon\Carbon::createFromFormat('d-m-Y', $timetable['date']);
+                                            $today = \Carbon\Carbon::today();
+                                            ?>
+                                            @if ($parsedDate->gt($today))
+                                            @php
+                                                $hasUpcomingTimetable = true;
+                                            @endphp
+                                            <tr style="{{ $loop->last ? '' : 'border-bottom: 1px solid #ccc;' }}">
+                                                <td>
+                                                    <div class="date" style="margin-top: 8px;">
+                                                        <div class="d-flex justify-content-between">
+                                                            <b>{{$timetable['course_name']}}</b><br>
+                                                            <p style="font-size: 16px; padding-bottom: 8px;">Room {{ $timetable['room'] }}</p>
+                                                        </div>
+                                                        <ul class="teacher-date-list">
+                                                            <li>
+                                                                <i class="fas fa-calendar-alt me-2"></i>
+                                                                {{ \Carbon\Carbon::parse($timetable['date'])->format('D d-m-Y') }}
+                                                            </li>
+                                                            <li>|</li>
+                                                            <li>
+                                                                <i class="fas fa-clock me-2"></i>
+                                                                {{ \Carbon\Carbon::parse($timetable['start'])->format('H:i') }} - 
+                                                                {{ \Carbon\Carbon::parse($timetable['end'])->format('H:i') }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        @endforeach
+                                        @if (!$hasUpcomingTimetable)
+                                            <tr>
+                                                <td colspan="2" class="text-center">
+                                                    <p>No upcoming timetable</p>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -188,25 +147,12 @@
                             <div class="card flex-fill comman-shadow">
                                 <div class="card-header">
                                     <div class="row align-items-center">
-                                        <div class="col-6">
-                                            <h5 class="card-title">Learning Activity</h5>
-                                        </div>
-                                        <div class="col-6">
-                                            <ul class="chart-list-out">
-                                                <li><span class="circle-blue"></span>Teacher</li>
-                                                <li><span class="circle-green"></span>Student</li>
-                                                <li class="star-menus"><a href="javascript:;"><i
-                                                            class="fas fa-ellipsis-v"></i></a></li>
-                                            </ul>
-                                        </div>
+                                        <canvas id="myLineChart"></canvas>
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                    <div id="apexcharts-area"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-12 col-xl-12 d-flex">
+                        {{-- <div class="col-12 col-lg-12 col-xl-12 d-flex">
                             <div class="card flex-fill comman-shadow">
                                 <div class="card-header d-flex align-items-center">
                                     <h5 class="card-title">Teaching History</h5>
@@ -272,10 +218,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
-                <div class="col-12 col-lg-12 col-xl-4 d-flex">
+                {{-- <div class="col-12 col-lg-12 col-xl-4 d-flex">
                     <div class="card flex-fill comman-shadow">
                         <div class="card-body">
                             <div id="calendar-doctor" class="calendar-container"></div>
@@ -375,8 +321,58 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const timetables = @json($timetables);
+
+    const filteredTimetables = timetables.filter(t => t.user_grade !== null);
+    console.log(filteredTimetables)
+    const grades = filteredTimetables.map(t => t.user_grade); 
+    const courseLabels = filteredTimetables.map(t => `${t.date} / ${t.course_name}`);
+
+    const data = {
+        labels: courseLabels,
+        datasets: [{
+            label: 'Grade', 
+            data: grades,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 2, 
+            fill: true,
+            tension: 0.4
+        }]
+    };
+
+    const optionss = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Grade'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    };
+
+    const ctx = document.getElementById('myLineChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',  // Line chart type
+        data: data,   // Data for the chart
+        options: optionss  // Chart options
+    });
+</script>
 @endsection

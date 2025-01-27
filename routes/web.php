@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CourseTimetableController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserManagementController;
@@ -12,6 +14,8 @@ use App\Http\Controllers\Setting;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\DepartmentController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,4 +118,25 @@ Route::controller(DepartmentController::class)->group(function () {
     Route::get('department/list/page', 'departmentList')->middleware('auth')->name('department/list/page'); // department/list/page
     Route::get('department/add/page', 'indexDepartment')->middleware('auth')->name('department/add/page'); // page add department
     Route::get('department/edit/page', 'editDepartment')->middleware('auth')->name('department/edit/page'); // page add department
+});
+
+Route::controller(CourseController::class)->group(function () {
+    Route::get('subject/add/page', 'subjectAdd')->middleware('auth')->name('subject/add/page'); // page subject
+    Route::get('subject/list/page', 'getCoursesByTeacher')->middleware('auth')->name('subject/list/page'); // page subject
+    Route::get('subject/grid/page', 'subjectGrid')->middleware('auth')->name('subject/grid/page'); // page grid subject
+    Route::post('subject/save', 'saveRecord')->middleware('auth')->name('subject/save'); // save record
+    Route::get('subject/edit/{id}', 'subjectEdit'); // view subject record
+    Route::post('subject/update', 'updateRecord')->middleware('auth')->name('subject/update'); // update record
+    Route::post('subject/delete', 'subjectDelete')->name('subject/delete'); // delete record teacher
+    Route::get('subject/{courseId}/participants/list/page/', 'getCoursesParticipants')->middleware(middleware: 'auth')->name('subject/participants/list/page'); // page subject
+    Route::get('subject/{courseId}/add/participant', 'subjectAddParticipant')->middleware('auth')->name('subject/add/participant'); // page subject
+    Route::post('subject/save/participant', 'subjectSaveParticipant')->middleware('auth')->name('subject/save/participant'); // save record
+    Route::get('subject/{courseId}/edit/participant/{participantId}', 'subjectEditParticipant'); // view subject record
+    Route::post('subject/edit/participant', 'subjectUpdateParticipant')->middleware('auth')->name('subject/edit/participant'); // update record
+    Route::get('subject/{courseId}/timetables/list/page/', 'getCoursesTimetables')->middleware(middleware: 'auth')->name('subject/timetables/list/page'); // page subject
+    Route::get('subject/{courseId}/add/timetable', 'subjectAddTimetable')->middleware('auth')->name('subject/add/timetable'); // page subject
+    Route::post('subject/save/timetable', 'subjectSaveTimetable')->middleware('auth')->name('subject/save/timetable'); // save record
+    Route::get('subject/{courseId}/edit/timetable/{participantId}', 'subjectEditTimetable'); // view subject record
+    Route::post('subject/edit/participant', 'subjectUpdateParticipant')->middleware('auth')->name('subject/edit/participant'); // update record
+    Route::post('subject/edit/participant/presence', 'updatePresenceAndGrade')->middleware(middleware: 'auth')->name('subject/edit/participant/presence'); // page subject
 });

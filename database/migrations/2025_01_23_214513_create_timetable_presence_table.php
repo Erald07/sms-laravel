@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('timetable_presence', function (Blueprint $table) {
             $table->id();
-            $table->string('student_user_id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('date_of_birth');
-            $table->string('phone_number');
+            $table->foreignId('timetable_id')->constrained('timetables')->onDelete('cascade');
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->integer('presence')->default(0); // True for present, false for absent
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('timetable_presence');
     }
 };

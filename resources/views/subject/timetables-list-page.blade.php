@@ -8,11 +8,7 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Teachers</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Teachers</li>
-                    </ul>
+                    <h3 class="page-title">Timetabes for {{ $course->course_name }}</h3>
                 </div>
             </div>
         </div>
@@ -48,17 +44,15 @@
                         <div class="page-header">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h3 class="page-title">Teachers</h3>
+                                    <h3 class="page-title">Timetables </h3>
                                 </div>
                                 @if (Session::get('role_name') !== 'Student')
                                 <div class="col-auto text-end float-end ms-auto download-grp">
-                                    <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i
-                                            class="feather-list"></i></a>
-                                    <a href="{{ route('teacher/grid/page') }}" class="btn btn-outline-gray me-2"><i
-                                            class="feather-grid"></i></a>
-                                    <a href="#" class="btn btn-outline-primary me-2"><i
-                                            class="fas fa-download"></i> Download</a>
-                                    <a href="{{ route('teacher/add/page') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                    {{-- <a href="subjects.html" class="btn btn-outline-gray me-2 active"><i
+                                            class="feather-list"></i></a> --}}
+                                    {{-- <a href="{{ route('subject/grid/page') }}" class="btn btn-outline-gray me-2"><i
+                                            class="feather-grid"></i></a> --}}
+                                    <a href="{{ url('subject/'.$course->id.'/add/timetable') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                                 </div>
                                 @endif
                             </div>
@@ -68,48 +62,30 @@
                             <table id="DataList" class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                                 <thead class="student-thread"> 
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Date of birth</th>
-                                        <th>Country</th>
-                                        @if (Session::get('role_name') !== 'Student')
-                                            <th class="text-end">Action</th>
-                                        @endif
+                                        <th>Date</th>
+                                        <th>Teacher</th>
+                                        <th>Room</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listTeacher as $list)
+                                    @foreach ($timetables as $timetable)
                                     <tr style="cursor: pointer;" onmouseover="this.style.backgroundColor='#f3f3f2'" onmouseout="this.style.backgroundColor=''">
-                                        <td hidden class="id">{{ $list->id }}</td>
-                                        <td>{{ $list->user_id }}</td>
+                                        <td hidden class="id">{{ $timetable->id }}</td>
                                         <td>
-                                            <h2 class="table-avatar">
-                                                <a href="teacher-details.html" class="avatar avatar-sm me-2">
-                                                    @if (!empty($list->avatar))
-                                                        <img class="avatar-img rounded-circle" src="{{ URL::to('images/'.$list->avatar) }}" alt="{{ $list->name }}">
-                                                    @else
-                                                        <img class="avatar-img rounded-circle" src="{{ URL::to('images/photo_defaults.jpg') }}" alt="{{ $list->name }}">
-                                                    @endif
-                                                </a>
-                                                <a href="teacher-details.html">{{ $list->name }}</a>
-                                            </h2>
+                                            {{ \Carbon\Carbon::parse($timetable->date)->format('D d-m-Y') }} <br>
+                                            {{ \Carbon\Carbon::parse($timetable->start)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($timetable->end)->format('H:i') }}
                                         </td>
-                                        <td>{{ $list->email }}</td>
-                                        <td>{{ $list->date_of_birth }}</td>
-                                        <td>{{ $list->country }}</td>
-                                        @if (Session::get('role_name') !== 'Student')
+                                        <td>{{ $course->teacher->full_name }}</td>
+                                        <td>{{ $timetable->room }}</td>
                                         <td class="text-end">
                                             <div class="actions">
-                                                <a href="{{ url('teacher/edit/'.$list->id) }}" class="btn btn-sm bg-danger-light">
-                                                    <i class="feather-edit"></i>
-                                                </a>
-                                                <a class="btn btn-sm bg-danger-light teacher_delete" data-bs-toggle="modal" data-bs-target="#teacherDelete">
-                                                    <i class="feather-trash-2 me-1"></i>
+                                                <a href="{{ url('subject/'.$course->id.'/edit/timetable/'.$timetable->id) }}" class="btn btn-sm bg-danger-light">
+                                                    <i class="far fa-edit me-2"></i>
                                                 </a>
                                             </div>
                                         </td>
-                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>

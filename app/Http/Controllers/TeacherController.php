@@ -23,7 +23,7 @@ class TeacherController extends Controller
     {
         $listTeacher = DB::table('users')
             ->join('teachers','teachers.teacher_id','users.user_id')
-            ->select('users.user_id','users.name','users.avatar','teachers.id','teachers.gender','teachers.mobile','teachers.address')
+            ->select('users.user_id', 'users.email', 'users.name','users.avatar','teachers.id','teachers.date_of_birth' ,'teachers.country')
             ->get();
         return view('teacher.list-teachers',compact('listTeacher'));
     }
@@ -40,20 +40,10 @@ class TeacherController extends Controller
     {
         $request->validate([
             'full_name'       => 'required|string',
-            'gender'          => 'required|string',
             'date_of_birth'   => 'required|string',
-            'mobile'          => 'required|string',
-            'joining_date'    => 'required|string',
-            'qualification'   => 'required|string',
-            'experience'      => 'required|string',
-            'username'        => 'required|string',
             'email'           => 'required|string',
             'password'        => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required',
-            'address'         => 'required|string',
-            'city'            => 'required|string',
-            'state'           => 'required|string',
-            'zip_code'        => 'required|string',
             'country'         => 'required|string',
         ]);
 
@@ -75,17 +65,7 @@ class TeacherController extends Controller
             $saveRecord = new Teacher;
             $saveRecord->teacher_id    = $user_id->user_id;
             $saveRecord->full_name     = $request->full_name;
-            $saveRecord->gender        = $request->gender;
             $saveRecord->date_of_birth = $request->date_of_birth;
-            $saveRecord->mobile        = $request->mobile;
-            $saveRecord->joining_date  = $request->joining_date;
-            $saveRecord->qualification = $request->qualification;
-            $saveRecord->experience    = $request->experience;
-            $saveRecord->username      = $request->username;
-            $saveRecord->address       = $request->address;
-            $saveRecord->city          = $request->city;
-            $saveRecord->state         = $request->state;
-            $saveRecord->zip_code      = $request->zip_code;
             $saveRecord->country       = $request->country;
             $saveRecord->save();
    
@@ -102,7 +82,8 @@ class TeacherController extends Controller
     /** edit record */
     public function editRecord($id)
     {
-        $teacher = Teacher::where('id',$id)->first();
+        $teacher = Teacher::where('id',$id)->with('user')->first();
+
         return view('teacher.edit-teacher',compact('teacher'));
     }
 
@@ -114,17 +95,7 @@ class TeacherController extends Controller
 
             $updateRecord = [
                 'full_name'     => $request->full_name,
-                'gender'        => $request->gender,
                 'date_of_birth' => $request->date_of_birth,
-                'mobile'        => $request->mobile,
-                'joining_date'  => $request->joining_date,
-                'qualification' => $request->qualification,
-                'experience'    => $request->experience,
-                'username'      => $request->username,
-                'address'       => $request->address,
-                'city'          => $request->city,
-                'state'         => $request->state,
-                'zip_code'      => $request->zip_code,
                 'country'      => $request->country,
             ];
             Teacher::where('id',$request->id)->update($updateRecord);
