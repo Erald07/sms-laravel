@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <form method="GET" action="{{ route('subject/list/page') }}">
+        {{-- <form method="GET" action="{{ route('subject/list/page') }}">
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <input type="text" class="form-control" name="search_id" placeholder="Search by ID..." value="{{ request('search_id') }}">
@@ -29,7 +29,7 @@
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </div>
-        </form>
+        </form> --}}
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
@@ -109,9 +109,9 @@
                                                 <a href="{{ url('subject/edit/'.$course->id) }}" class="btn btn-sm bg-danger-light">
                                                     <i class="far fa-edit me-2"></i>
                                                 </a>
-                                                {{-- <a class="btn btn-sm bg-danger-light delete" data-bs-toggle="modal" data-bs-target="#delete">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a> --}}
+                                                <a class="btn btn-sm bg-danger-light delete" data-bs-toggle="modal" data-id="{{ $course->id }}" data-bs-target="#subjectDelete">
+                                                    <i class="feather-trash-2 me-1"></i>
+                                                </a>
                                             </div>
                                         </td>
                                         <td class="text-end">
@@ -138,7 +138,7 @@
 </div>
 
 {{-- model teacher delete --}}
-<div class="modal fade contentmodal" id="teacherDelete" tabindex="-1" aria-hidden="true">
+<div class="modal fade contentmodal" id="subjectDelete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content doctor-profile">
             <div class="modal-header pb-0 border-bottom-0  justify-content-end">
@@ -147,7 +147,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('teacher/delete') }}" method="POST">
+                <form action="{{ route('subject/delete') }}" method="POST">
                     @csrf
                     <div class="delete-wrap text-center">
                         <div class="del-icon">
@@ -175,33 +175,18 @@
             $('.e_id').val(_this.find('.id').text());
         });
 
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     const searchIdInput = document.querySelector('input[name="search_id"]');
-        //     const searchNameInput = document.querySelector('input[name="search_name"]');
-        //     const tableRows = document.querySelectorAll('.table tbody tr');
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete');
 
-        //     searchIdInput.addEventListener('input', filterCourses);
-        //     searchNameInput.addEventListener('input', filterCourses);
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const courseId = this.getAttribute('data-id');
 
-        //     function filterCourses() {
-        //         const searchId = searchIdInput.value.toLowerCase();
-        //         const searchName = searchNameInput.value.toLowerCase();
-
-        //         tableRows.forEach(row => {
-        //             const courseId = row.querySelector('.course-id').textContent.toLowerCase();
-        //             const courseName = row.querySelector('.course-name').textContent.toLowerCase();
-
-        //             if (
-        //                 (searchId && courseId.includes(searchId)) || 
-        //                 (searchName && courseName.includes(searchName))
-        //             ) {
-        //                 row.style.display = '';
-        //             } else {
-        //                 row.style.display = 'none';
-        //             }
-        //         });
-        //     }
-        // });
+                    const modalInput = document.querySelector('#subjectDelete .e_id');
+                    modalInput.value = courseId;
+                });
+            });
+        });
 
     </script>
 @endsection

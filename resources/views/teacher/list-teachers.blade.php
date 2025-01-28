@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div class="student-group-form">
+        {{-- <div class="student-group-form">
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">

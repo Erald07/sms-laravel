@@ -353,12 +353,11 @@ class CourseController extends Controller
         return redirect()->back()->with('success', 'Presence and grades updated successfully.');
     }
 
-    public function deleteRecord(Request $request)
+    public function subjectDelete(Request $request)
     {
         DB::beginTransaction();
         try {
-
-            Subject::where('subject_id',$request->subject_id)->delete();
+            Course::where('id',$request->id)->delete();
             DB::commit();
             Toastr::success('Deleted record successfully :)','Success');
             return redirect()->back();
